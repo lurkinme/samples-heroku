@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FileKeeperController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileKeeperController.class);
     private String file = "";
 
     @PostMapping(path = "/save", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> notify(@RequestBody String body) {
-        LOGGER.info("Incoming file {}", body);
         file = body;
         return new ResponseEntity<String>(HttpStatus.CREATED);
     }
