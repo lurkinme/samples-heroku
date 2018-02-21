@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Map;
 
@@ -60,6 +61,18 @@ public class Main {
     StringBuilder headersString = new StringBuilder();
     headers.forEach((k,v) -> headersString.append(k).append("=").append(v).append(", "));
     LOGGER.info("LOG incoming method {} params {} body {} headers {}", request.getMethod(), requestParamsString.toString(), body, headersString);
+  }
+
+  @RequestMapping("/logFail")
+  public void logError(HttpServletRequest request, @RequestBody(required = false) String body, @RequestHeader MultiValueMap<String, String> headers, @RequestParam(required = false) Map<String,String> requestParams, HttpServletResponse response) {
+    requestParams = requestParams == null ? Collections.emptyMap() : requestParams;
+    headers = headers == null ? new LinkedMultiValueMap<>() : headers;
+    StringBuilder requestParamsString = new StringBuilder();
+    requestParams.forEach((k,v) -> requestParamsString.append(k).append("=").append(v).append("&")) ;
+    StringBuilder headersString = new StringBuilder();
+    headers.forEach((k,v) -> headersString.append(k).append("=").append(v).append(", "));
+    LOGGER.info("LOG incoming method {} params {} body {} headers {}", request.getMethod(), requestParamsString.toString(), body, headersString);
+    response.setStatus(500);
   }
 
 }
